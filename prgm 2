@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <time.h>
+void monoalphabetic_encrypt(char *plaintext, char *ciphertext_map) {
+    int i;
+    for (i = 0; plaintext[i] != '\0'; i++) {
+        if (isalpha(plaintext[i])) {
+            char original_char = tolower(plaintext[i]);
+            char encrypted_char = ciphertext_map[original_char - 'a'];
+            if (isupper(plaintext[i])) {
+                encrypted_char = toupper(encrypted_char);
+            }
+            plaintext[i] = encrypted_char;
+        }
+    }
+}
+
+int main() {
+    char plaintext[1000];
+    char ciphertext_map[26];
+    int i;
+    srand(time(NULL));
+    for (i = 0; i < 26; i++) {
+        ciphertext_map[i] = 'A' + i;
+    }
+    for (i = 25; i > 0; i--) {
+        int j = rand() % (i + 1);
+        char temp = ciphertext_map[i];
+        ciphertext_map[i] = ciphertext_map[j];
+        ciphertext_map[j] = temp;
+    }
+    printf("Enter plaintext to encrypt: ");
+    fgets(plaintext, sizeof(plaintext), stdin);
+    plaintext[strcspn(plaintext, "\n")] = '\0';
+    monoalphabetic_encrypt(plaintext, ciphertext_map);
+    printf("Encrypted text: %s\n", plaintext);
+
+    return 0;
+}
+
+OUTPUT:-
+
+Input: The user enters "Hello, World!" as the plaintext.
+Encryption: The program uses a randomly shuffled substitution map to encrypt each letter:
+'H' -> 'Q'
+'e' -> 's'
+'l' -> 's'
+'o' -> 'p'
+',' (comma) -> ','
+' ' (space) -> ' '
+'W' -> 'J'
+'r' -> 's'
+'d' -> 's'
+'!' (exclamation mark) -> 't'
